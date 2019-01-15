@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/textLogon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/efetuar_logon"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30sp"
+        android:layout_marginTop="40sp"
+        android:text="@string/login"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@id/textLogon"
+        app:layout_constraintTop_toBottomOf="@id/textLogon" />
+
+    <TextView
+        android:id="@+id/textSenha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40sp"
+        android:text="@string/senha"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@id/textLogin"
+        app:layout_constraintTop_toBottomOf="@id/textLogin" />
+
+    <EditText
+        android:id="@+id/editLogin"
+        android:layout_width="250sp"
+        android:layout_height="45sp"
+        android:layout_marginLeft="60sp"
+        android:layout_marginTop="35dp"
+        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toBottomOf="@id/textLogin"
+        app:layout_constraintLeft_toLeftOf="@id/textLogin"
+        app:layout_constraintTop_toBottomOf="@+id/textLogon" />
+
+    <EditText
+        android:id="@+id/editSenha"
+        android:layout_width="250sp"
+        android:layout_height="45sp"
+        android:layout_marginTop="91dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        app:layout_constraintLeft_toLeftOf="@id/editLogin"
+        app:layout_constraintTop_toBottomOf="@+id/textLogon" />
+
+    <RadioGroup
+        android:id="@+id/radioTipo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="@id/editSenha"
+        app:layout_constraintTop_toBottomOf="@id/editSenha">
+
+        <RadioButton
+            android:id="@+id/radioAluno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/aluno" />
+
+        <RadioButton
+            android:id="@+id/radioProfessor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:text="@string/professor" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonEntrar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:onClick="entrarClicado"
+        android:text="@string/entrar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/radioTipo" />
+
+    <ImageView
+        android:id="@+id/imageIComp"
+        android:layout_width="130dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonEntrar"
+        app:srcCompat="@mipmap/icomp" />
+
+
+</android.support.constraint.ConstraintLayout>

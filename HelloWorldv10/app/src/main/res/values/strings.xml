@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Hello World v1.0</string>
+    <string name="efetuar_logon">Efetuar Logon</string>
+    <string name="login">Login:</string>
+    <string name="senha">Senha:</string>
+    <string name="aluno">Aluno</string>
+    <string name="professor">Professor</string>
+    <string name="entrar">Entrar</string>
+    <string name="novo_usuario">Novo Usuário</string>
+    <string name="sobre">Sobre</string>
+    <string name="configs">Configurações</string>
+</resources>

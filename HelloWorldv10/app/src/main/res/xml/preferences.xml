@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceCategory
+    android:title="Geral">
+    <SwitchPreference
+        android:key="logomarca"
+        android:title="Mostrar Logomarca"
+        android:summary="Logomarca do Icomp"
+        android:defaultValue="true"/>
+    <EditTextPreference
+        android:key="login"
+        android:dialogTitle="Login Padrão"
+        android:summary="Login padrão da tela"
+        android:title="Login Padrão"/>
+    <ListPreference
+        android:dialogTitle="Tipo Padrão"
+        android:entries="@array/settings_tipo_titles"
+        android:entryValues="@array/settings_tipo_values"
+        android:key="tipo"
+        android:summary="Tipo padrão da tela"
+        android:title="Tipo Padrão"/>
+</PreferenceCategory>
+</PreferenceScreen>
