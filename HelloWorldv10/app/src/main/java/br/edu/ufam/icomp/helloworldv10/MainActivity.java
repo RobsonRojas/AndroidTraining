@@ -1,8 +1,12 @@
 package br.edu.ufam.icomp.helloworldv10;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -34,6 +39,41 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i("HelloDebug", "Activity principal iniciada!");
+
+        LocationManager locationManager
+                = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        final TextView latitude = findViewById(R.id.latitude);
+        final TextView longitude = findViewById(R.id.longitude);
+
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.i("HelloDebug", "Location: " + location.getLatitude()
+                        + ", " + location.getLongitude());
+
+                latitude.setText(String.format("%.3f", location.getLatitude()));
+                longitude.setText(String.format("%.3f", location.getLongitude()));
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
+                                                             0, locationListener);
     }
 
     public void entrarClicado(View view) {
