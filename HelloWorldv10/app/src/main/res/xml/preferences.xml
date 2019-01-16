@@ -19,5 +19,28 @@
         android:key="tipo"
         android:summary="Tipo padrão da tela"
         android:title="Tipo Padrão"/>
+    <EditTextPreference
+        android:key="longitude"
+        android:dialogTitle="Longitude"
+        android:summary="Longitude Central da Região"
+        android:title="Longitude"/>
+    <PreferenceCategory
+        android:title="Local">
+        <EditTextPreference
+            android:key="latitude"
+            android:dialogTitle="Latitude"
+            android:summary="Latitude Central"
+            android:title="Latitude"/>
+        <EditTextPreference
+            android:key="longitude"
+            android:dialogTitle="Longitude"
+            android:summary="Longitude Central da Região"
+            android:title="Longitude"/>
+        <EditTextPreference
+            android:key="raio"
+            android:dialogTitle="Raio"
+            android:summary="Distância da região"
+            android:title="Raio da Região (km)"/>
+    </PreferenceCategory>
 </PreferenceCategory>
 </PreferenceScreen>

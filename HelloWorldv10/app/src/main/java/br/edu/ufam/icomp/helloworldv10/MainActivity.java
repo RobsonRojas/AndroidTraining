@@ -1,5 +1,6 @@
 package br.edu.ufam.icomp.helloworldv10;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -77,24 +78,51 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void entrarClicado(View view) {
-        Intent intent = new Intent(this, BemVindoActivity.class);
+        // getting region preferences
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        EditText inputLogin = (EditText) findViewById(R.id.editLogin);
-        EditText inputSenha = (EditText) findViewById(R.id.editSenha);
+        String raioPref = sharedPreferences.getString("raio", "0");
+        String latitudePref = sharedPreferences.getString("latitude", "0");
+        String longitudePref = sharedPreferences.getString("longitude", "0");
+        Double raio = Double.valueOf(raioPref);
+        Double latitude = Double.valueOf(latitudePref);
+        Double longitude = Double.valueOf(longitudePref);
 
-        // Verifica a senha
-        UsuarioDAO usuarioDAO = new UsuarioDAO(this);
-        Usuario usuario = usuarioDAO.getUsuario(inputLogin.getText().toString(),
-                inputSenha.getText().toString());
+        LocationManager locationManager
+                = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
-        if (usuario != null) {
-            intent.putExtra("usuario", usuario);
-            startActivity(intent);
+        @SuppressLint("MissingPermission")
+        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        Location crntLocation=new Location("crntlocation");
+        crntLocation.setLatitude(latitude);
+        crntLocation.setLongitude(longitude);
+
+        float distance = location.distanceTo(crntLocation) / 1000;
+
+        // checking region
+        if (distance < raio) {
+            Intent intent = new Intent(this, BemVindoActivity.class);
+
+            EditText inputLogin = findViewById(R.id.editLogin);
+            EditText inputSenha = findViewById(R.id.editSenha);
+
+            // Verifica a senha
+            UsuarioDAO usuarioDAO = new UsuarioDAO(this);
+            Usuario usuario = usuarioDAO.getUsuario(inputLogin.getText().toString(),
+                    inputSenha.getText().toString());
+
+            if (usuario != null) {
+                intent.putExtra("usuario", usuario);
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Usuário e/ou Senha inválidos!",
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, "Usuário e/ou Senha inválidos!",
+            Toast.makeText(this, "Região Inválida para Login",
                     Toast.LENGTH_SHORT).show();
         }
-
     }
 
     @Override
