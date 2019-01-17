@@ -98,53 +98,67 @@
         android:id="@+id/imageIComp"
         android:layout_width="130dp"
         android:layout_height="80dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/buttonEntrar"
         app:srcCompat="@mipmap/icomp" />
 
     <TextView
+        android:id="@+id/latTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="80dp"
         android:text="Lat.: "
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageIComp" />
+        app:layout_constraintTop_toBottomOf="@id/buttonEntrar" />
     <TextView
         android:id="@+id/latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="80dp"
         android:text="1.2345"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageIComp" />
+        app:layout_constraintTop_toBottomOf="@id/buttonEntrar" />
 
     <TextView
+        android:id="@+id/longTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginLeft="10dp"
         android:text="Lon.: "
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageIComp" />
+        app:layout_constraintTop_toBottomOf="@+id/latTextView" />
 
     <TextView
         android:id="@+id/longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="70dp"
+        android:layout_marginLeft="60dp"
         android:text="1.23456"
         android:textSize="20sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageIComp"/>
+        app:layout_constraintRight_toLeftOf="@id/imageIComp"
+        app:layout_constraintLeft_toLeftOf="@+id/longTextView"
+        app:layout_constraintTop_toBottomOf="@+id/latitude"/>
+    <Button
+        android:id="@+id/buttonSensores"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="70dp"
+        android:onClick="onButtonSensoresClick"
+        android:text="@string/sensores"
+        app:layout_constraintLeft_toLeftOf="@id/imageIComp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageIComp" />
 
 </android.support.constraint.ConstraintLayout>

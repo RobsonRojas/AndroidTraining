@@ -200,4 +200,9 @@ public class MainActivity extends AppCompatActivity {
         Log.i("HelloDebug", "Método onRestart executado ...");
     }
 
+    public void onButtonSensoresClick(View view) {
+        Intent intent = new Intent(this, SensorsActivity.class);
+
+        startActivity(intent);
+    }
 }
