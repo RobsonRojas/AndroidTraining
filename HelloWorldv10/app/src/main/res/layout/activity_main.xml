@@ -64,7 +64,7 @@
         android:id="@+id/radioTipo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="@id/editSenha"
         app:layout_constraintTop_toBottomOf="@id/editSenha">
@@ -87,7 +87,7 @@
         android:id="@+id/buttonEntrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:onClick="entrarClicado"
         android:text="@string/entrar"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -96,8 +96,8 @@
 
     <ImageView
         android:id="@+id/imageIComp"
-        android:layout_width="130dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="70dp"
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -109,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:text="Lat.: "
         android:textSize="20sp"
         android:textStyle="bold"
@@ -120,7 +120,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="60dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         android:text="1.2345"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -130,7 +130,7 @@
         android:id="@+id/longTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp"
         android:text="Lon.: "
         android:textSize="20sp"
@@ -142,7 +142,7 @@
         android:id="@+id/longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="60dp"
         android:text="1.23456"
         android:textSize="20sp"
@@ -160,5 +160,17 @@
         app:layout_constraintLeft_toLeftOf="@id/imageIComp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageIComp" />
+
+    <Button
+        android:id="@+id/nodeMcuButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="70dp"
+        android:onClick="onButtonNodeMCUClick"
+        android:text="@string/nodemcu"
+        app:layout_constraintLeft_toLeftOf="@id/imageIComp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonSensores" />
 
 </android.support.constraint.ConstraintLayout>

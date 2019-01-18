@@ -10,4 +10,5 @@
     <string name="sobre">Sobre</string>
     <string name="configs">Configurações</string>
     <string name="sensores">SENSORES</string>
+    <string name="nodemcu">NODEMCU</string>
 </resources>
