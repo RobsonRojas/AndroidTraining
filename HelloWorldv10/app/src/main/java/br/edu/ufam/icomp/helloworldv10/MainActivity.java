@@ -5,6 +5,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -33,7 +37,9 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SensorEventListener {
+    private Sensor acel, mag, gir;
+    private SensorManager sensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
 
         LocationManager locationManager
                 = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        acel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mag = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        gir = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 
         final TextView latitude = findViewById(R.id.latitude);
         final TextView longitude = findViewById(R.id.longitude);
@@ -75,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
                                                              0, locationListener);
+
+
     }
 
     public void entrarClicado(View view) {
@@ -180,12 +193,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("HelloDebug", "Método onResume executado ...");
+
+        sensorManager.registerListener(this, acel, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, mag, SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(this, gir, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.i("HelloDebug", "Método onPause executado ...");
+
+        sensorManager.unregisterListener(this, acel);
+        sensorManager.unregisterListener(this, mag);
+        sensorManager.unregisterListener(this, gir);
     }
 
     @Override
@@ -204,5 +225,22 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SensorsActivity.class);
 
         startActivity(intent);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER
+                || event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD
+                || event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
+
+
+            Intent intent = new Intent(this, BemVindoActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }

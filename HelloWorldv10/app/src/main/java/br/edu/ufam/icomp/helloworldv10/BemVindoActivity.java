@@ -18,15 +18,17 @@ public class BemVindoActivity extends AppCompatActivity {
 
         Usuario usuario = (Usuario) intent.getSerializableExtra("usuario");
 
-        TextView textBemVindo =
-                (TextView) findViewById(R.id.textBemVindo);
+        if (usuario != null) {
+            TextView textBemVindo =
+                    (TextView) findViewById(R.id.textBemVindo);
 
-        textBemVindo.setText(Html.fromHtml(
-                "Olá <b>" + usuario.getLogin() +
-                        "</b>! Seu nome é <b>" + usuario.getNome() +
-                        "</b>, sua senha é <b>" + usuario.getSenha() +
-                        "</b> e você é <i>" + usuario.getTipoString() +
-                        "</i>.<br><br>Bem Vindo!"));
+            textBemVindo.setText(Html.fromHtml(
+                    "Olá <b>" + usuario.getLogin() +
+                            "</b>! Seu nome é <b>" + usuario.getNome() +
+                            "</b>, sua senha é <b>" + usuario.getSenha() +
+                            "</b> e você é <i>" + usuario.getTipoString() +
+                            "</i>.<br><br>Bem Vindo!"));
+        }
     }
 
 
