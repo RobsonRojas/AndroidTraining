@@ -19,7 +19,7 @@ void connect();
 void handleMessage(char* topic, byte* payload, unsigned int length);
 
 void setup() {
-  Serial.begin(1152200);
+  Serial.begin(115200);
   pinMode(LED, OUTPUT);
   digitalWrite(LED, 1);
 
