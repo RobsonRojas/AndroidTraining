@@ -1,30 +1,29 @@
 package br.edu.ufam.icomp.helloworldv10;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
-import org.eclipse.paho.client.mqttv3.MqttPersistenceException;
-import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-public class NodeActivity extends AppCompatActivity implements MqttCallback {
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class NodeActivity extends AppCompatActivity {
 
     EditText endereco;
     TextView led, ldr;
-    Button conectButton;
-    MqttClient mqtt;
-    final String clientId = "82202320210Rob";
-    final String topic = "82202320210";
-    final String IP = "200.17.49.151";
+    final String IP = "192.168.0.31";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,81 +32,127 @@ public class NodeActivity extends AppCompatActivity implements MqttCallback {
 
         endereco = findViewById(R.id.nodeEndereco);
         endereco.setText(IP);
+
         led = findViewById(R.id.nodeLed);
         ldr = findViewById(R.id.nodeLdr);
-        conectButton = findViewById(R.id.nodeConectar);
     }
 
     public void atualizarClicado(View view) {
-        try {
-            if (mqtt == null) {
-                mqtt = new MqttClient("tcp://" + endereco.getText().toString() + ":1883",
-                        clientId, new MemoryPersistence());
-
-                mqtt.setCallback(this);
-                mqtt.connect();
-                mqtt.subscribe(topic);
-
-                conectButton.setText("DESCONECTAR");
-            } else {
-                mqtt.unsubscribe(topic);
-                mqtt.disconnect();
-                conectButton.setText("CONECTAR");
-
-                mqtt = null;
-            }
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
+        AtualizarAsyncTask task = new AtualizarAsyncTask(this);
+        task.execute();
     }
 
     public void ledClicado(View view) {
-        String cmd = view.getId() == R.id.nodeLiga? "L1" : "L0";
-        try {
-            if (mqtt != null)
-                mqtt.publish(topic, cmd.getBytes(), 1, true);
-        } catch (MqttPersistenceException e) {
-            e.printStackTrace();
-        } catch (MqttException e) {
-            e.printStackTrace();
+        int state = view.getId() == R.id.nodeLiga ? 1 : 0;
+        LedAsyncTask task = new LedAsyncTask(this, state);
+        task.execute();
+    }
+
+    private class AtualizarAsyncTask extends AsyncTask<Void, Void, String> {
+        NodeActivity activity;
+
+        public AtualizarAsyncTask(NodeActivity nodeActivity) {
+            this.activity = nodeActivity;
         }
-    }
 
-    @Override
-    public void connectionLost(Throwable cause) {
-        Log.d("HelloDebug", "Conexão perdida ..");
-    }
-
-    @Override
-    public void messageArrived(String topic, MqttMessage message) throws Exception {
-        if (topic.equals(this.topic)) {
-            String payload = new String(message.getPayload());
-
-            Log.d("HelloDebug", "Message received: " + payload);
+        @Override
+        protected String doInBackground(Void... params) {
             try {
-                if (payload.startsWith("led")) {
-                    final String ledValue = payload.substring(5).split(",")[0];
-                    final String ldrValue = payload.split(",")[1].substring(5);
+                if (activity.endereco != null) {
+                    String endereco = activity.endereco.getText().toString();
 
-                    Log.d("HelloDebug", "Led: " + ledValue + ", LDR: " + ldrValue);
+                    Log.i("HelloDebug", "Enviando requisicao para " + endereco + "..");
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            led.setText(ledValue.equals("1")?"Ligado": "Desligado");
-                            ldr.setText(ldrValue);
-                        }
-                    });
+                    URL url = new URL("http://" + endereco);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.connect();
 
+                    // Converte a resposta para string
+                    InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+
+                    BufferedReader br = new BufferedReader(isr);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    String line;
+
+                    while ((line = br.readLine()) != null)
+                        stringBuilder.append(line);
+
+                    return stringBuilder.toString();
                 }
-            } catch (Exception e) {
-                Log.d("HelloDebug", "EXCEPTION: " + e);
+
+                return null;
+            } catch (MalformedURLException e1) {
+                Log.e("HelloDebug", "Exceção! " + e1);
+                e1.printStackTrace();
+            } catch (IOException e1) {
+                Log.e("HelloDebug", "Exceção! " + e1);
+                e1.printStackTrace();
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            Log.i("HelloDebug", "Resposta JSON: " + result);
+
+            try {
+                JSONObject json = new JSONObject(result);
+                activity.led.setText(json.getInt("led") == 1 ? "Ligado" : "Desligado");
+                activity.ldr.setText(json.getString("ldr"));
+
+            } catch (JSONException e) {
+                Toast.makeText(activity, "Erro ao realizar requisição!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken token) {
-        Log.d("HelloDebug", "Mensagem entregue..");
+    private class LedAsyncTask extends AsyncTask<Void, Void, String> {
+        NodeActivity activity;
+        int state;
+
+        public LedAsyncTask(NodeActivity nodeActivity, int state) {
+            this.activity = nodeActivity;
+            this.state = state;
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+                String endereco = activity.endereco.getText().toString();
+                Log.i("HelloDebug", "Enviando requisicao para " + endereco + "..");
+
+                URL url = new URL("http://" + endereco + "/led?state=" + state);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.connect();
+
+                // Converte a resposta para string
+                InputStreamReader isr = new InputStreamReader(conn.getInputStream());
+                BufferedReader br = new BufferedReader(isr);
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+
+                while ((line = br.readLine()) != null)
+                    stringBuilder.append(line);
+
+                return stringBuilder.toString();
+            } catch (IOException e) {
+                Log.e("HelloDebug", "Exceção! " + e);
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            Log.i("HelloDebug", "Resposta JSON: " + result);
+
+            try {
+                JSONObject json = new JSONObject(result);
+                activity.led.setText(state == 1 ? "Ligado" : "Desligado");
+
+            } catch (JSONException e) {
+                Toast.makeText(activity, "Erro ao realizar requisição!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }
